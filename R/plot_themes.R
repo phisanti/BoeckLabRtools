@@ -37,7 +37,8 @@ theme_plateview <- function(col_var, row_var, col_lab = "Column", row_lab = "Row
     ggplot2::theme(
       axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6),
       axis.text.y = ggplot2::element_text(size = 6),
-      axis.title = ggplot2::element_text(size = 10),
+      axis.title.x = ggplot2::element_text(size = 10),
+      axis.title.y = ggplot2::element_text(size = 10, angle = 90, vjust = 0.5),
       strip.text = ggplot2::element_text(size = 12, face = "bold")
     )
   )
