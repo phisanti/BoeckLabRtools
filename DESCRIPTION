@@ -1,0 +1,21 @@
+Package: BoeckLabRtools
+Title: Boeck Lab R Tools
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First", 
+           family = "Last",
+           email = "santiago.cano-muniz@unibas.ch", 
+           role = c("aut", "cre"))
+Author: First Last [aut, cre]
+Maintainer: First Last <santiago.cano-muniz@unibas.ch>
+Description: This package aims to collect useful functions for the Boeck Lab at the DBM, University of Basel (Switzerland).
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: R (>= 4.0.0)
+Imports:
+    data.table,
+    magrittr,
+    ggplot2
+
