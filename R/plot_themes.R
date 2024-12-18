@@ -66,7 +66,7 @@ theme_plateview <- function(col_var, row_var, col_lab = "Column", row_lab = "Row
 #' @inheritParams ggplot2::theme_grey
 #' @importFrom ggplot2 theme_grey
 theme_foundation <- function(base_size = 12, base_family = "") {
-  thm <- theme_grey(base_size = base_size, base_family = base_family)
+  thm <- ggplot2::theme_grey(base_size = base_size, base_family = base_family)
   for (i in names(thm)) {
     if ("colour" %in% names(thm[[i]])) {
       thm[[i]]["colour"] <- list(NULL)
@@ -75,15 +75,14 @@ theme_foundation <- function(base_size = 12, base_family = "") {
       thm[[i]]["fill"] <- list(NULL)
     }
   }
-  thm + theme(
-    panel.border = element_rect(fill = NA),
-    legend.background = element_rect(colour = NA),
-    line = element_line(colour = "black"),
-    rect = element_rect(fill = "white", colour = "black"),
-    text = element_text(colour = "black")
+  thm + ggplot2::theme(
+    panel.border = ggplot2::element_rect(fill = NA),
+    legend.background = ggplot2::element_rect(colour = NA),
+    line = ggplot2::element_line(colour = "black"),
+    rect = ggplot2::element_rect(fill = "white", colour = "black"),
+    text = ggplot2::element_text(colour = "black")
   )
 }
-
 
 #' @title Custom ggplot2 Theme for BoeckLab
 #'
