@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Define the usage function
+usage() {
+    echo "Usage: BoeckLabRtools <command> [args]"
+    echo ""
+    echo "Commands:"
+    echo "  join_plate_data <path> [output_prefix] [parallel] [cores]  Run the join_plate_data script"
+    echo "    <path>            : Path to the directory containing summary files"
+    echo "    [output_prefix]   : Prefix for the output file (default: NULL)"
+    echo "    [parallel]        : Whether to run in parallel (default: FALSE)"
+    echo "    [cores]           : Number of cores to use if running in parallel (default: NULL)"
+    echo ""
+    echo "  asct_qcreport <input_file>              Run the asct_qcreport script"
+    echo "    <input_file>      : Path to the input file"
+    echo ""
+    echo "  help                                    Show this help message"
+    echo "  --help, -h                              Show this help message"
+}
+
+# Define package functions
+join_plate_data() {
+    local path=$1
+    local output_prefix=${2:-NULL}
+    local parallel=${3:-FALSE}
+    local cores=${4:-NULL}
+
+    RSCRIPT_CMD="Rscript -e \"BoeckLabRtools::combine_summary_files(path = '$path', pattern = '_summary.csv', output_prefix = '$output_prefix', parallel = $parallel, cores = $cores)\""
+    eval $RSCRIPT_CMD
+}
+
+asct_qcreport() {
+    local input_file=$1
+    local current_dir=$(pwd)
+    local input_file_path="${current_dir}/$(basename $input_file)"
+    local output_file="${input_file%.*}_qc_report.pdf"
+    local output_file_path="${current_dir}/$(basename $output_file)"
+
+    # Get the absolute path of the installed package
+    local package_path=$(Rscript -e "cat(system.file(package='BoeckLabRtools'))")
+    local qc_template_path="${package_path}/rmd/qc_report.Rmd"
+
+    RSCRIPT_CMD="Rscript -e \"rmarkdown::render('${qc_template_path}', params=list(file='${input_file_path}'), output_file='${output_file_path}')\""
+    eval $RSCRIPT_CMD
+}
+
+# Check if no arguments were provided
+if [ $# -eq 0 ]; then
+    usage
+    exit 1
+fi
+
+# Get the command
+COMMAND=$1
+shift
+
+# Run the appropriate function based on the command
+case $COMMAND in
+    join_plate_data)
+        join_plate_data "$@"
+        ;;
+    asct_qcreport)
+        asct_qcreport "$@"
+        ;;
+    help|--help|-h)
+        usage
+        ;;
+    *)
+        echo "Error: Unknown command '$COMMAND'"
+        usage
+        exit 1
+        ;;
+esac

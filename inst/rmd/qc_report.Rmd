@@ -1,5 +1,5 @@
 ---
-title: "QC Report"
+title: "ASCT QC Report"
 output: 
   pdf_document:
     fig_caption: yes
@@ -7,24 +7,22 @@ output:
     fig_width: 10
 params:
   file: ""
+  working_dir: ""
 ---
-
 
 ```{r setup, include=FALSE, echo=FALSE}
 # Load required libraries
 library(data.table)
-library(ggplot2)
-library(gridExtra)
-library(viridis)
+library(BoeckLabRtools)
 
 # Error if file not found
 if (!file.exists(params$file)) {
-  stop("File not found.")
+  stop(paste0("File not found: ", params$file, ". Please ensure the file exists in the working directory. Current working directory: ", getwd()))
 }
 
 # Import data
 d <- fread(params$file)
-d[, c("experiment", "well", "field") := tstrsplit(file, "_", keep = c(1, 3, 4))]
+d[, c("well", "field") := tstrsplit(file, "_", keep = c(2, 4))]
 d[,  well := rename_well(well, file)]
 d[, c("row", "col") := tstrsplit(well, "(?<=\\D)(?=\\d)", perl=TRUE)]
 d[, col := as.integer(col)]
@@ -43,9 +41,8 @@ For each object class, a heatmap is generated where:
 - The color intensity indicates the total count of objects in each well
 
 This visualization allows for quick identification of patterns or anomalies in object distribution across the plate, potentially highlighting experimental inconsistencies or biological phenomena of interest.
-
 ```{r, echo = FALSE}
-  object_class_plots <- create_object_class_plots(d)
+object_class_plots <- BoeckLabRtools:::create_object_class_plots(d)
 ```
 
 \newpage
@@ -59,7 +56,7 @@ Key aspects of this plot:
 2. Logarithmic Scale: The growth ratio is log-transformed to better visualize the wide range of growth patterns, from minimal to extensive growth.
 
 ```{r, echo = FALSE}
-growth_plot <- create_growth_plot(d)
+growth_plot <- BoeckLabRtools:::create_growth_plot(d)
 plot(growth_plot)
 ```
 
@@ -75,7 +72,7 @@ Key features of this plot:
 
 
 ```{r, echo=FALSE}
-growth_plot <- create_consistency_plot(d)
+growth_plot <- BoeckLabRtools:::create_consistency_plot(d)
 plot(growth_plot)
 ```
 \newpage
@@ -92,7 +89,7 @@ Key aspects of this plot:
 3. Standard Deviation: For each well, the standard deviation of the live fraction across all time points is computed. This serves as a measure of classification consistency over time.
 
 ```{r, echo=FALSE}
-pi_consistency_plot <- create_pi_consistency_plot(d)
+pi_consistency_plot <- BoeckLabRtools:::create_pi_consistency_plot(d)
 plot(pi_consistency_plot)
 ```
 \newpage
@@ -101,6 +98,6 @@ plot(pi_consistency_plot)
 This plot illustrates the time delays observed for the imaging in the first frame across the plate.
 
 ```{r, echo=FALSE}
-time_delay <- create_time_delay_plot(d)
+time_delay <- BoeckLabRtools:::create_time_delay_plot(d)
 plot(time_delay)
 ```
