@@ -22,5 +22,6 @@ Imports:
     future.apply,
     future,
     gridExtra,
-    viridis
+    viridis,
+    rmarkdown
 
