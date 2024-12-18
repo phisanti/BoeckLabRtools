@@ -116,7 +116,7 @@ create_pi_consistency_plot <- function(d) {
     by = .(file, well, frame, object_class)]
   d[, live_frac := 1 - pi_frac]
   
-  d_susmmary <- d[object_class %in% c('single-cell'), 
+  d_summary <- d[object_class %in% c('single-cell'), 
     .(live_frac = mean(live_frac),
       sd_live_frac = stats::sd(live_frac)), 
     by = .(well, row, col, frame)][, .(total_sd = sum(sd_live_frac)),
