@@ -46,7 +46,7 @@
 #' merged_data_transposed <- merge_plate_data(d, well_info_transposed, plate_format = "transposed")
 #' 
 #' @export
-merge_plate_data <- function(d, well_info, info_name = 'well_info', plate_format = "plate_view", wells_to_ignore = c("EMPTY", "BW"), force_lower = TRUE, inplace = TRUE) {
+merge_plate_data <- function(d, well_info, info_name = "well_info", plate_format = "plate_view", wells_to_ignore = c("EMPTY", "BW"), force_lower = TRUE, inplace = TRUE) {
   well <- NULL
   # Check if well_info is a path to a CSV file
   if (is.character(well_info) && length(well_info) == 1 && file.exists(well_info)) {
