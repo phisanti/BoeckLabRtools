@@ -25,7 +25,7 @@ join_plate_data() {
     local parallel=${3:-FALSE}
     local cores=${4:-NULL}
 
-    RSCRIPT_CMD="Rscript -e \"BoeckLabRtools::combine_summary_files(path = '$path', pattern = '_summary.csv', output_prefix = '$output_prefix', parallel = $parallel, cores = $cores)\""
+    RSCRIPT_CMD="Rscript -e \"BoeckLabRtools::combine_summary_files(results_file_paths = '$path', pattern = '_summary.csv', output_prefix = '$output_prefix', parallel = $parallel, cores = $cores)\""
     eval $RSCRIPT_CMD
 }
 
