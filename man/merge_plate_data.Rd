@@ -7,9 +7,11 @@
 merge_plate_data(
   d,
   well_info,
+  info_name = "well_info",
   plate_format = "plate_view",
   wells_to_ignore = c("EMPTY", "BW"),
-  force_lower = TRUE
+  force_lower = TRUE,
+  inplace = TRUE
 )
 }
 \arguments{
@@ -17,11 +19,16 @@ merge_plate_data(
 
 \item{well_info}{A data.frame or data.table containing the well information. The format depends on the \code{plate_format} argument.}
 
+\item{info_name}{A character string specifying the name of the column containing the well information. Default is "well_info".}
+
 \item{plate_format}{A character string specifying the format of the well information. Can be either "plate_view" (default) or "transposed".}
 
 \item{wells_to_ignore}{A character vector specifying the wells to ignore. Default is c("EMPTY", "BW").}
 
 \item{force_lower}{A logical value indicating whether to force column names to lowercase. Default is TRUE.}
+
+\item{inplace}{A logical value indicating whether to modify the input data.table in place. Default is TRUE. This means the data.table given
+as input will be directly modified without using the assignment operator '<-'.}
 }
 \value{
 A data.table with the merged drug data and well information.
