@@ -28,18 +28,20 @@
 #'
 #' @export
 theme_plateview <- function(col_var, row_var, col_lab = "Column", row_lab = "Row", 
-                            fill_lab = NULL, title = NULL, subtitle = NULL) {
+                            fill_lab = NULL, title = NULL, subtitle = NULL, 
+                            base_size = 12, base_family = "") {
   list(
     ggplot2::scale_y_discrete(limits = rev(levels(factor(row_var)))),
     ggplot2::scale_x_continuous(breaks = 1:max(col_var), labels = 1:max(col_var)),
     ggplot2::theme_void(),
     ggplot2::labs(x = col_lab, y = row_lab, fill = fill_lab, title = title, subtitle = NULL),
     ggplot2::theme(
-      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5, size = 6),
-      axis.text.y = ggplot2::element_text(size = 6),
-      axis.title.x = ggplot2::element_text(size = 10),
-      axis.title.y = ggplot2::element_text(size = 10, angle = 90, vjust = 0.5),
-      strip.text = ggplot2::element_text(size = 12, face = "bold")
+      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5, size = base_size * 0.5, family = base_family),
+      axis.text.y = ggplot2::element_text(size = base_size * 0.5, family = base_family),
+      axis.title.x = ggplot2::element_text(size = base_size * 0.8, family = base_family),
+      axis.title.y = ggplot2::element_text(size = base_size * 0.8, angle = 90, vjust = 0.5, family = base_family),
+      strip.text = ggplot2::element_text(size = base_size, face = "bold", family = base_family),
+      legend.text = ggplot2::element_text(size = base_size * 0.8, family = base_family)
     )
   )
 }
