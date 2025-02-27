@@ -73,7 +73,7 @@ add_well_info <- function(d, well_info, info_name = "well_info", plate_format = 
   if (is.character(well_info) && length(well_info) == 1 && file.exists(well_info)) {
     well_info <- data.table::fread(well_info, header = TRUE)
   }
-  
+
   # Check plate_format and column names
   if (plate_format == "plate_view") {
     if (colnames(well_info)[1] != "row") {
@@ -84,13 +84,13 @@ add_well_info <- function(d, well_info, info_name = "well_info", plate_format = 
         stop("Column 1 must be named 'row' in plate_view format")
       }
     }
-    
+
     # Remove columns with all NA values to prevent type coercion warnings
     is_empty_col <- sapply(well_info, function(x) all(is.na(x)))
     if (any(is_empty_col[-1])) { # Skip the first column (row)
       well_info <- well_info[, !is_empty_col, with = FALSE]
     }
-    
+
     well_info <- data.table::melt(well_info, id.vars = "row", variable.name = "col", value.name = info_name)
   } else if (plate_format == "transposed") {
     if (!all(colnames(well_info)[1:2] %in% c("col", "row"))) {
@@ -124,6 +124,7 @@ add_well_info <- function(d, well_info, info_name = "well_info", plate_format = 
     d[well_info, (info_name) := get(info_name), on = c("well", "col", "row")]
     return(invisible(d))
   } else {
-    return(well_info[, .SD, .SDcols = c("well", info_name)])
+    d_copy <- data.table::copy(d)
+    return(d_copy[well_info, (info_name) := get(info_name), on = c("well", "col", "row")])
   }
 }
