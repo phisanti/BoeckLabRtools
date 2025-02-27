@@ -55,7 +55,7 @@ fill_missing_classes <- function(dt, key_cols, fill_col, cols_0count, required_v
     dt_local <- data.table::melt.data.table(dt_local, id.vars = key_cols, value.name = "dummy", variable.name = fill_col)
     dt_local[, dummy := NULL]
     # Merge and fill
-    dt_filled <- data.table::merge(dt, dt_local, by = c(key_cols, fill_col), all = TRUE)
+    dt_filled <- data.table::merge.data.table(dt, dt_local, by = c(key_cols, fill_col), all = TRUE)
     dt_filled[, 
         (cols_0count) := lapply(.SD, function(x) data.table::fifelse(is.na(x), 0, x)), 
         .SDcols = cols_0count]
