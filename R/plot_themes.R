@@ -104,8 +104,13 @@ theme_foundation <- function(base_size = 12, base_family = "") {
 #' p <- ggplot(mtcars, aes(x = wt, y = mpg)) + geom_point()
 #' p + theme_BoeckLab()
 #' @export
-theme_BoeckLab <- function(base_size = 14, base_family = "Arial", x.text.angle = 0, border = FALSE,
-                           margin = TRUE, legend = c("top", "bottom", "left", "right", "none"), spacing = 0.5) {
+theme_BoeckLab <- function(base_size = 14, 
+                           base_family = "Arial", 
+                           x.text.angle = 0, 
+                           border = FALSE,
+                           margin = TRUE, 
+                           legend = "top", 
+                           spacing = 0.5) {
   # Security checks
   if (!is.numeric(base_size) || base_size <= 0) stop("base_size must be a positive numeric value")
   if (!is.character(base_family)) stop("base_family must be a character string")
@@ -113,6 +118,8 @@ theme_BoeckLab <- function(base_size = 14, base_family = "Arial", x.text.angle =
   if (!is.logical(border)) stop("border must be a logical value")
   if (!is.logical(margin)) stop("margin must be a logical value")
   if (!is.numeric(spacing) || spacing < 0) stop("spacing must be a non-negative numeric value")
+  if (!legend %in% c("top", "bottom", "left", "right", "none")) stop("legend must be one of 'top', 'bottom', 'left', 'right', or 'none'")
+  if (length(legend) > 1) stop("legend must be of length = 1")
 
   half_line <- base_size / 2
   if (x.text.angle > 5) xhjust <- 1 else xhjust <- NULL
