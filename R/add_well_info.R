@@ -114,17 +114,17 @@ add_well_info <- function(d, well_info, info_name = "well_info", plate_format = 
   }
 
   # Add info and merge datasets
-  well_info[, ":="(well = paste0(row, col), col = as.integer(col))]
+  well_info[, ":="(well = paste0(row, col), col = as.integer(as.character(col)))]
   filt_rows <- !well_info[[info_name]] %in% wells_to_ignore
   well_info <- well_info[filt_rows]
   data.table::setorder(well_info, well, col, row)
   data.table::setorder(d, well)
 
   if (inplace) {
-    d[well_info, (info_name) := get(info_name), on = c("well", "col", "row")]
+    d[well_info, (info_name) := get(info_name), on = c("well")]
     return(invisible(d))
   } else {
     d_copy <- data.table::copy(d)
-    return(d_copy[well_info, (info_name) := get(info_name), on = c("well", "col", "row")])
+    return(d_copy[well_info, (info_name) := get(info_name), on = c("well")])
   }
 }
