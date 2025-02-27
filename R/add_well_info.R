@@ -1,9 +1,30 @@
 #' Merge plate information with well information
 #'
-#' This function merges a dataset containing plate data information with well information based on the specified plate format.
+#' This function is designed to add well-specific information from plate experiments (e.g., 96-well, 384-well, or 1536-well plates) to your data.
+#' It merges a dataset containing plate data with well information based on the specified plate format. The function provides a flexible way to 
+#' integrate metadata about plate wells (such as drug types, concentrations, or experimental conditions) with plate measurement data.
 #'
-#' @param d A data.table containing the well information. It must have columns named "row", "col", and "well" (all lowercase).
-#' @param well_info A data.frame or data.table containing the well information. The format depends on the `plate_format` argument.
+#' The function requires a consistent mapping between the row/col/well coordinates in both the metadata file and the target data. The coordinates
+#' must use the same labeling scheme in both datasets for proper merging. For example, if your plate uses rows A-H and columns 1-12 (for a 96-well plate),
+#' both datasets should follow this labeling pattern.
+#'
+#' When using the default 'plate_view' format, the input well_info data should visually resemble the physical plate layout:
+#' - The first column must be labeled "row" and contain row identifiers (e.g., A, B, C, etc.)
+#' - The subsequent columns must be numeric and represent column numbers (e.g., 1, 2, 3, etc.)
+#' - The cell values contain the information to be merged (e.g., drug names, concentrations)
+#'
+#' For example, a 96-well plate metadata might look like:
+#'   row | 1      | 2      | 3      | ... | 12
+#'   ----+--------+--------+--------+-----+--------
+#'   A   | Drug1  | Drug2  | Ctrl   | ... | Drug6
+#'   B   | Drug1  | Drug2  | Ctrl   | ... | Drug6
+#'   ...
+#'   H   | Drug7  | Drug8  | Blank  | ... | Blank
+#'
+#' Alternatively, the 'transposed' format can be used when the metadata is structured in a tabular form with columns for row, col, and the information.
+#'
+#' @param d A data.table of path to csv containing the well information. It must have columns named "row", "col", and "well" (all lowercase).
+#' @param well_info A data.frame, data.table or path to csv containing the well information. The format depends on the `plate_format` argument.
 #' @param info_name A character string specifying the name of the column containing the well information. Default is "well_info".
 #' @param plate_format A character string specifying the format of the well information. Can be either "plate_view" (default) or "transposed".
 #' @param wells_to_ignore A character vector specifying the wells to ignore. Default is c("EMPTY", "BW").
@@ -46,7 +67,7 @@
 #' merged_data_transposed <- merge_plate_data(d, well_info_transposed, plate_format = "transposed")
 #' 
 #' @export
-merge_plate_data <- function(d, well_info, info_name = "well_info", plate_format = "plate_view", wells_to_ignore = c("EMPTY", "BW"), force_lower = TRUE, inplace = TRUE) {
+add_well_info <- function(d, well_info, info_name = "well_info", plate_format = "plate_view", wells_to_ignore = c("EMPTY", "BW"), force_lower = TRUE, inplace = TRUE) {
   well <- NULL
   # Check if well_info is a path to a CSV file
   if (is.character(well_info) && length(well_info) == 1 && file.exists(well_info)) {
@@ -63,6 +84,13 @@ merge_plate_data <- function(d, well_info, info_name = "well_info", plate_format
         stop("Column 1 must be named 'row' in plate_view format")
       }
     }
+    
+    # Remove columns with all NA values to prevent type coercion warnings
+    is_empty_col <- sapply(well_info, function(x) all(is.na(x)))
+    if (any(is_empty_col[-1])) { # Skip the first column (row)
+      well_info <- well_info[, !is_empty_col, with = FALSE]
+    }
+    
     well_info <- data.table::melt(well_info, id.vars = "row", variable.name = "col", value.name = info_name)
   } else if (plate_format == "transposed") {
     if (!all(colnames(well_info)[1:2] %in% c("col", "row"))) {

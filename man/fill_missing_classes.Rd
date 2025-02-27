@@ -4,14 +4,16 @@
 \alias{fill_missing_classes}
 \title{Fill Missing Combinations in Data.Table}
 \usage{
-fill_missing_classes(dt, key_cols, fill_col, required_values, in_place = FALSE)
+fill_missing_classes(dt, key_cols, fill_col, cols_0count, required_values)
 }
 \arguments{
 \item{dt}{A data.table object containing the source data}
 
 \item{key_cols}{Character vector of column names to use as keys}
 
-\item{fill_col}{Character string specifying which key column to fill}
+\item{fill_col}{Character string specifying which key column to expand with required values}
+
+\item{cols_0count}{Character vector of column names that should be filled with zeros when missing}
 
 \item{required_values}{Vector of values that must exist for fill_col}
 }
@@ -19,23 +21,29 @@ fill_missing_classes(dt, key_cols, fill_col, required_values, in_place = FALSE)
 A data.table with complete combinations and filled rows
 }
 \description{
-Creates complete combinations of specified key columns and fills missing rows
+This function is designed to fill the 0-count cases for object classes missed in certain conditions.
+Creates complete combinations of specified key columns and fills missing rows with zeros in count columns
 }
 \details{
-The function ensures all combinations of key columns exist in the output.
-All required_values must be present in the original dataset.
+The function ensures all combinations of key columns with the required values exist in the output.
+All required_values must already be present in the original dataset.
+Missing values in cols_0count will be filled with zeros.
 }
 \examples{
+library(data.table)
 dt <- data.table(
-  file = rep("f1", 3),
-  frame = 1:3,
-  object_class = c("A", "B", "A")
+  file = c("video1", "video1", "video1", "video2", "video2"),
+  frame = c(1, 2, 3, 1, 2),
+  object_class = c("car", "person", "car", "car", "bicycle"),
+  count = c(3, 1, 2, 1, 1),
+  score = c(0.9, 0.8, 0.7, 0.95, 0.85)
 )
 result <- fill_missing_classes(
-  dt,
+  dt = dt,
   key_cols = c("file", "frame", "object_class"),
   fill_col = "object_class",
-  required_values = c("A", "B")
+  cols_0count = c("count", "score"),
+  required_values = c("car", "person", "bicycle")
 )
 
 }

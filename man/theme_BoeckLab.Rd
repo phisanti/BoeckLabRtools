@@ -10,7 +10,7 @@ theme_BoeckLab(
   x.text.angle = 0,
   border = FALSE,
   margin = TRUE,
-  legend = c("top", "bottom", "left", "right", "none"),
+  legend = "top",
   spacing = 0.5
 )
 }

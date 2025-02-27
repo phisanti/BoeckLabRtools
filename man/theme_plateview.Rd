@@ -11,7 +11,9 @@ theme_plateview(
   row_lab = "Row",
   fill_lab = NULL,
   title = NULL,
-  subtitle = NULL
+  subtitle = NULL,
+  base_size = 12,
+  base_family = ""
 )
 }
 \arguments{
