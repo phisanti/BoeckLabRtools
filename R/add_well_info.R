@@ -102,7 +102,7 @@ add_well_info <- function(d, well_info, info_name = "well_info", plate_format = 
       }
     }
   }
-  
+
   # Check column names in d
   if (!all(c("row", "col", "well") %in% tolower(colnames(d)))) {
     if (force_lower) {
