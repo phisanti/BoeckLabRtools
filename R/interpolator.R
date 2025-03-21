@@ -5,7 +5,7 @@
 #'
 #' @param time A numeric vector of time points.
 #' @param values A numeric vector of values corresponding to the time points.
-#' @param timestep A numeric or difftime vector specifying the desired time steps for interpolation.
+#' @param timepoints A numeric or difftime vector specifying the desired time steps for interpolation.
 #' @param fill_extremes A logical value indicating whether to fill extreme values (default: FALSE).
 #' @param return_time A logical value indicating whether to return interpolated time points (default: TRUE).
 #'
@@ -15,37 +15,37 @@
 #' @examples
 #' time <- c(0, 1, 2, 3, 4, 5)
 #' values <- c(0, 1, 2, 3, 4, 5)
-#' interpolate_variable(time, values, timestep = 0.5)
+#' interpolate_variable(time, values, timepoints = 0.5)
 #'
 #' time <- c(0, 1, 2, 4, 8)
 #' values <- c(0, 1, 2, 4, 8)
-#' interpolate_variable(time, values, timestep = c(0, 1, 2, 1), fill_extremes = TRUE)
+#' interpolate_variable(time, values, timepoints = c(0, 1, 2, 1), fill_extremes = TRUE)
 #'
 #' @export
-interpolate_variable <- function(time, values, timestep, fill_extremes = FALSE, return_time = TRUE) {
+interpolate_variable <- function(time, values, timepoints, fill_extremes = FALSE, return_time = TRUE) {
   # Initial validations remain the same
   if (!is.numeric(values)) stop("values must be numeric")
   if (length(time) != length(values)) stop("time and values must have same length")
   if (length(time) < 2) stop("at least 2 points required for interpolation")
-  if (length(timestep) > length(time)) stop("timestep must be smaller or equal length than time")
-  if (!is.numeric(timestep) && !inherits(timestep, "difftime")) stop("timestep must be numeric or difftime")
+  if (length(timepoints) > length(time)) stop("timepoints must be smaller or equal length than time")
+  if (!is.numeric(timepoints) && !inherits(timepoints, "difftime")) stop("timepoints must be numeric or difftime")
   if (any(duplicated(time))) warning("Duplicate time points found. Check if data is properly grouped")
   time_num <- as.numeric(time)
   if (any(is.na(time_num))) warning("NAs found in time values")
 
-  # Handle timesteps
-  time_range <- if (length(timestep) > 1 && length(timestep) < length(time)) {
+  # Handle timepointss
+  time_range <- if (length(timepoints) > 1 && length(timepoints) < length(time)) {
     # Generate regular sequence
     regular_seq <- seq(min(time_num), max(time_num), length.out = length(time))
     # Merge key timepoints with regular sequence
-    all_points <- sort(unique(c(timestep, regular_seq)))
+    all_points <- sort(unique(c(timepoints, regular_seq)))
     # Keep only the number of points matching the input length
     indices <- round(seq(1, length(all_points), length.out = length(time)))
     all_points[indices]
-  } else if (length(timestep) > 1) {
-    timestep
+  } else if (length(timepoints) > 1) {
+    timepoints
   } else {
-    seq(min(time_num), max(time_num), by = timestep)
+    seq(min(time_num), max(time_num), by = timepoints)
   }
 
   # Deal with extrapolation

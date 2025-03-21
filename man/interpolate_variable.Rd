@@ -7,7 +7,7 @@
 interpolate_variable(
   time,
   values,
-  timestep,
+  timepoints,
   fill_extremes = FALSE,
   return_time = TRUE
 )
@@ -17,7 +17,7 @@ interpolate_variable(
 
 \item{values}{A numeric vector of values corresponding to the time points.}
 
-\item{timestep}{A numeric or difftime vector specifying the desired time steps for interpolation.}
+\item{timepoints}{A numeric or difftime vector specifying the desired time steps for interpolation.}
 
 \item{fill_extremes}{A logical value indicating whether to fill extreme values (default: FALSE).}
 
@@ -34,10 +34,10 @@ It can handle regular and irregular time steps, fill extreme values, and return 
 \examples{
 time <- c(0, 1, 2, 3, 4, 5)
 values <- c(0, 1, 2, 3, 4, 5)
-interpolate_variable(time, values, timestep = 0.5)
+interpolate_variable(time, values, timepoints = 0.5)
 
 time <- c(0, 1, 2, 4, 8)
 values <- c(0, 1, 2, 4, 8)
-interpolate_variable(time, values, timestep = c(0, 1, 2, 1), fill_extremes = TRUE)
+interpolate_variable(time, values, timepoints = c(0, 1, 2, 1), fill_extremes = TRUE)
 
 }
