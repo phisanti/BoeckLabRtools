@@ -81,17 +81,17 @@ The data is now ready to include the drug info or species info from our plate sc
 ```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 plate_schema <- data.table(BoeckLabRtools::plate_schema) # This is the example schema for our dataset
 setnames(plate_schema, c("row", as.character(3:12)))
-knitr::kable(plate_schema, 
-             caption = "Plate Schema with Treatment Information",
-             format = "html") %>%
-  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
-                           full_width = FALSE) %>%
-  kableExtra::row_spec(0, bold = TRUE, background = "#E6F0FF") %>%
-  kableExtra::column_spec(1, bold = TRUE, background = "#F0F0F0") %>%
-  kableExtra::add_footnote("Treatment abbreviations: IPM - Imipenem, TGC - Tigecycline, AMK - Amikacin, MXF - Moxifloxacin, CLR - Clarithromycin", 
-                          notation = "symbol")
-
-
+footnote <- "Treatment abbreviations: IPM - Imipenem, TGC - Tigecycline, AMK - Amikacin, MXF - Moxifloxacin, CLR - Clarithromycin"
+# Apply formatting with knitr::kable only
+knitr::kable(plate_schema,
+             caption = "<strong>Plate Schema with Treatment Information</strong>",
+             format = "html",
+             align = "c",
+             table.attr = 'class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;"') %>%
+  # Add footnote as a separate element
+  paste0("<div style='font-size: smaller; font-style: italic; margin-top: 10px;'>", 
+         footnote, "</div>") %>%
+         cat()
 ```
 Then, you can use the `add_well_info` function to include the drug info in the data table. In this example, we use the already example plate schema, but you can add the data directly from the file
 ```{r add_treatment_info}
