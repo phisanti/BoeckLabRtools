@@ -26,3 +26,4 @@ Imports:
     rmarkdown
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
+URL: https://phisanti.github.io/BoeckLabRtools/
