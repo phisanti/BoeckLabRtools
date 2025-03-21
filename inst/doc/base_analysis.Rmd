@@ -1,0 +1,3 @@
+%\VignetteIndexEntry{Introduction to BoeckLabRtools}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
