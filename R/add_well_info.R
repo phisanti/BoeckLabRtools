@@ -37,6 +37,7 @@
 #' @examples
 #' # Example data
 #' library(data.table)
+#' library(BoeckLabRtools)
 #' d <- read.table(text = "
 #' row | col | well | value
 #' A   | 1   | A1   | 10
@@ -52,8 +53,7 @@
 #' header = TRUE, sep = "|", stringsAsFactors = FALSE, strip.white = TRUE)
 #' well_info <- data.table::data.table(well_info)
 #' # Merge drug data with well information
-#' merged_data <- merge_plate_data(d, well_info)
-#'
+#' merged_data <- add_well_info(d, well_info)
 #' # Merge drug data with transposed well information
 #' well_info_transposed <- read.table(text = "
 #' col | row | info
@@ -64,7 +64,7 @@
 #' header = TRUE, sep = "|", stringsAsFactors = FALSE, strip.white = TRUE)
 #' well_info_transposed <- data.table::data.table(well_info_transposed)
 #' well_info_transposed[, well := paste0(row, col)]
-#' merged_data_transposed <- merge_plate_data(d, well_info_transposed, plate_format = "transposed")
+#' merged_data_transposed <- add_well_info(d, well_info_transposed, plate_format = "transposed")
 #' 
 #' @export
 add_well_info <- function(d, well_info, info_name = "well_info", plate_format = "plate_view", wells_to_ignore = c("EMPTY", "BW"), force_lower = TRUE, inplace = TRUE) {

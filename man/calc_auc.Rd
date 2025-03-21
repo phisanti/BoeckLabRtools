@@ -24,6 +24,7 @@ It can interpolate the input data to a specified number of steps and normalize t
 }
 \examples{
 # Basic usage
+library(BoeckLabRtools)
 x <- c(0, 1, 2, 3, 4, 5)
 y <- c(0, 1, 2, 3, 4, 5)
 calc_auc(y, x)

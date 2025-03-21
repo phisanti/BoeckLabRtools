@@ -12,8 +12,45 @@ navbar:
     - news
     right: github
 reference:
+- title: Kill Curve Analysis
+  desc: Functions for analyzing kill curve data
+  contents:
+  - get_killcurves
+  - interpolate_variable
+  - enforce_decrease
+  - calc_auc
+  - fill_missing_classes
+- title: Data Handling
+  desc: Functions for manipulating and preprocessing experimental data
+  contents:
+  - add_well_info
+  - rename_well
+  - extrapolate_t0_data
+  - combine_summaries
+  - combine_summary_files
 - title: Quality Control Functions
   desc: Functions for quality control in antimicrobial testing
-- title: Kill Curve Kinetics Tools
-  desc: Functions for analyzing kill curve data
+  contents:
+  - render_QC
+  - create_consistency_plot
+  - create_pi_consistency_plot
+  - create_time_delay_plot
+  - create_growth_plot
+  - create_object_class_plots
+- title: Visualization
+  desc: Functions for data visualization
+  contents:
+  - theme_BoeckLab
+  - theme_plateview
+  - theme_foundation
+- title: Datasets
+  desc: Example datasets included in the package
+  contents:
+  - matches("killcurves")
+  - matches("plate_schema")
+articles:
+- title: Vignettes
+  navbar: Tutorials
+  contents:
+  - base_analysis
 
