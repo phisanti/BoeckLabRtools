@@ -79,21 +79,23 @@ d[, (fill_cols_uniq_val) := lapply(.SD, function(x) fifelse(is.na(x), unique(x)[
 
 The data is now ready to include the drug info or species info from our plate schema. If your plate schema looks as follows:
 ```{r table2, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-tbl <- "| row | 3   | 4   | 5   | 6   | 7   | 8   | 9   | 10  | 11  | 12  |
-|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-| C   | IPM | TGC | TGC | AMK | AMK | AMK | TGC | TGC | MXF | MXF |
-| D   | IPM | TGC | TGC | AMK | AMK | AMK | TGC | IPM | CLR | CLR |
-| E   | IPM | TGC | TGC | AMK | TGC | TGC | TGC | IPM | CLR | TGC |
-| F   | IPM | AMK | AMK | TGC | TGC | TGC | TGC | IPM | TGC | AMK |
-| G   | MXF | AMK | TGC | TGC | TGC | TGC | TGC | TGC | AMK | TGC |
-| H   | TGC | AMK | AMK | TGC | TGC | TGC | TGC | IPM | AMK | AMK |
-"
-cat(tbl)
+plate_schema <- data.table(BoeckLabRtools::plate_schema) # This is the example schema for our dataset
+setnames(plate_schema, c("row", as.character(3:12)))
+knitr::kable(plate_schema, 
+             caption = "Plate Schema with Treatment Information",
+             format = "html") %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                           full_width = FALSE) %>%
+  kableExtra::row_spec(0, bold = TRUE, background = "#E6F0FF") %>%
+  kableExtra::column_spec(1, bold = TRUE, background = "#F0F0F0") %>%
+  kableExtra::add_footnote("Treatment abbreviations: IPM - Imipenem, TGC - Tigecycline, AMK - Amikacin, MXF - Moxifloxacin, CLR - Clarithromycin", 
+                          notation = "symbol")
+
+
 ```
 Then, you can use the `add_well_info` function to include the drug info in the data table. In this example, we use the already example plate schema, but you can add the data directly from the file
 ```{r add_treatment_info}
 
-plate_schema <- data.table(BoeckLabRtools::plate_schema) # This is the example schema for our dataset
 d <- add_well_info(d, 
                    plate_schema, # In your case plate schema can be a path to the file
                    info_name = "treatment",
@@ -141,8 +143,8 @@ At this point, we have our kill curves! We only need to plot them. Depending on 
 # plot
 d_sc %>%
   ggplot(., aes(x = timestep, y =live_frac, group = file)) +
-  geom_point() +
-  facet_wrap(well ~ .) +
+  geom_point(aes(col = well), show.legend = FALSE) +
+  facet_wrap(treatment ~ .) +
   theme_BoeckLab()
 
 ```
