@@ -13,6 +13,7 @@ usage() {
     echo ""
     echo "  asct_qcreport <input_file>              Run the asct_qcreport script"
     echo "    <input_file>      : Path to the input file"
+    echo "    [well_field]      : Location of well and field in filename pattern (default: 3,4)"
     echo ""
     echo "  help                                    Show this help message"
     echo "  --help, -h                              Show this help message"
@@ -31,16 +32,17 @@ join_plate_data() {
 
 asct_qcreport() {
     local input_file=$1
+    local well_field=${2:-"c(3,4)"}
     local current_dir=$(pwd)
     local input_file_path="${current_dir}/$(basename $input_file)"
     local output_file="${input_file%.*}_qc_report.pdf"
     local output_file_path="${current_dir}/$(basename $output_file)"
-
-    # Get the absolute path of the installed package
     local package_path=$(Rscript -e "cat(system.file(package='BoeckLabRtools'))")
     local qc_template_path="${package_path}/rmd/qc_report.Rmd"
 
-    RSCRIPT_CMD="Rscript -e \"rmarkdown::render('${qc_template_path}', params=list(file='${input_file_path}'), output_file='${output_file_path}')\""
+    echo "Input file: $input_file_path"
+
+    RSCRIPT_CMD="Rscript -e \"setwd('${current_dir}'); rmarkdown::render('${qc_template_path}', params=list(file='${input_file}', well_field=${well_field}), output_file='${output_file}')\""
     eval $RSCRIPT_CMD
 }
 

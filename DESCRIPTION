@@ -1,6 +1,6 @@
 Package: BoeckLabRtools
 Title: Boeck Lab R Tools
-Version: 0.0.4.0000
+Version: 0.0.4.1
 Authors@R: 
     person(given = "First", 
            family = "Last",

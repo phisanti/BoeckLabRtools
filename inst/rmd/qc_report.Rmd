@@ -7,14 +7,13 @@ output:
     fig_width: 10
 params:
   file: ""
-  working_dir: ""
+  well_field: c(3,4)
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
 # Load required libraries
 library(data.table)
 library(BoeckLabRtools)
-
 # Error if file not found
 if (!file.exists(params$file)) {
   stop(paste0("File not found: ", params$file, ". Please ensure the file exists in the working directory. Current working directory: ", getwd()))
@@ -22,7 +21,7 @@ if (!file.exists(params$file)) {
 
 # Import data
 d <- fread(params$file)
-d[, c("well", "field") := tstrsplit(file, "_", keep = c(2, 4))]
+d[, c("well", "field") := tstrsplit(file, "_", keep = params$well_field)]
 d[,  well := rename_well(well, file)]
 d[, c("row", "col") := tstrsplit(well, "(?<=\\D)(?=\\d)", perl=TRUE)]
 d[, col := as.integer(col)]
