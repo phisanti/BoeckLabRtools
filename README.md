@@ -42,6 +42,26 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 # Install the Boeck Lab R Tools package from GitHub
 remotes::install_github("phisanti/BoeckLabRtools")
 ```
+### Dependencies
+
+This package relies on `pandoc` and `pdftotext` to generate quality report outputs. You need to install these dependencies before using the report generation features.
+
+#### Installing dependencies on macOS:
+
+```bash
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+```bash
+# Install pandoc
+brew install pandoc
+```
+
+```bash
+# Install basictex (which includes pdftotext)
+brew install basictex
+```
 
 ## Contributing
 We welcome contributions from the community to help improve and expand the functionality of the Boeck Lab R Tools package. If you have any suggestions, bug reports, or would like to contribute code, please feel free to open an issue or submit a pull request on our GitHub repository.
