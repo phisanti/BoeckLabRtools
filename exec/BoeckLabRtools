@@ -32,7 +32,7 @@ join_plate_data() {
 
 asct_qcreport() {
     local input_file=$1
-    local well_field=${2:-"c(3,4)"}
+    local well_field=${2:-"3,4"}
     local current_dir=$(pwd)
     local input_file_path="${current_dir}/$(basename $input_file)"
     local output_file="${input_file%.*}_qc_report.pdf"
@@ -42,7 +42,7 @@ asct_qcreport() {
 
     echo "Input file: $input_file_path"
 
-    RSCRIPT_CMD="Rscript -e \"setwd('${current_dir}'); rmarkdown::render('${qc_template_path}', params=list(file='${input_file}', well_field=${well_field}), output_file='${output_file}')\""
+    RSCRIPT_CMD="Rscript -e \"setwd('${current_dir}'); rmarkdown::render('${qc_template_path}', params=list(file='${input_file}', well_field=c(${well_field})), output_file='${output_file}')\""
     eval $RSCRIPT_CMD
 }
 
