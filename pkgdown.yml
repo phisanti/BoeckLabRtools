@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   base_analysis: base_analysis.html
-last_built: 2025-03-25T09:51Z
+last_built: 2025-03-25T10:03Z
 urls:
   reference: https://phisanti.github.io/BoeckLabRtools/reference
   article: https://phisanti.github.io/BoeckLabRtools/articles
